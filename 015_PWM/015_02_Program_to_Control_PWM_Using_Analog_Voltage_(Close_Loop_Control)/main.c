@@ -26,7 +26,7 @@
  * This is a real-world example of:
  *   ADC ? Control Algorithm ? PWM Actuator
  *
- * AUTHOR : Mudassir
+ * AUTHOR : 
  * DATE   : 15/12/2025
  * DAY    : Monday
  ***************************************************************/

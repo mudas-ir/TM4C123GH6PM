@@ -20,12 +20,12 @@
  * After conversion, the ADC value is passed to the function
  * key_scan(), which compares the received ADC value with
  * predefined ranges (shifted right by 4 bits) and returns the
- * corresponding HEX key ('0'�'9', 'A'�'F').
+ * corresponding HEX key ('0'->'9', 'A'->'F').
  *
  * The returned key can be displayed on LCD, UART, or further used
  * based on application design.
  *
- * Author	: Mudassir
+ * Author	: 
  * DATE     : 12/12/2025
  * DAY      : Thursday
  * *************************************************************/

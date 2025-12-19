@@ -22,7 +22,7 @@
  *   - Load Value    : 0xFFFF (Sets PWM period)
  *   - Duty Cycle    : Controlled using CMPA
  *
- * AUTHOR : Mudassir
+ * AUTHOR : 
  * DATE   : 15/12/2025
  * DAY    : Monday
  ***************************************************************/
