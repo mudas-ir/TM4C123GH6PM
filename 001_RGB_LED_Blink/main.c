@@ -20,11 +20,13 @@ void delayMs(int n);
 
 int main(void)
 {
-    // --------------------------------------------------------------
-    // STEP 1: Enable clock for PORT F
-    // Bit 5 of RCGCGPIO (0x20) corresponds to Port F.
-    // Without enabling clock, Port F registers will not work.
-    // --------------------------------------------------------------
+    // SYSCTL_RCC_R = 0x01c01551;   // 50MHz Clock from POISC=16MHz Divisor=0x03(200Mhz/4)
+    // SYSCTL_RCC_R = 0x02401551;   // 40MHz Clock from POISC=16MHz Divisor=0x03(200Mhz/5)
+    //  --------------------------------------------------------------
+    //  STEP 1: Enable clock for PORT F
+    //  Bit 5 of RCGCGPIO (0x20) corresponds to Port F.
+    //  Without enabling clock, Port F registers will not work.
+    //  --------------------------------------------------------------
     SYSCTL_RCGCGPIO_R |= 0x20;
 
     // Peripheral Ready Register (PRGPIO)
@@ -77,3 +79,59 @@ void delayMs(int n)
         {
         } // Do nothing (waste time)
 }
+
+// SYSCTL_RCC_R = 0x01C01551;
+// ---------------------------------------------------------------
+// This line configures the system clock to run at ~50 MHz.
+//
+// RCC (Run-Mode Clock Configuration) register controls:
+//  - Clock source selection
+//  - PLL enable/disable
+//  - Crystal value
+//  - System clock divisor
+//
+// Bit-level meaning of 0x01C01551:
+//
+// [31:23] = 0x01C  → Use PLL and system clock divider
+// [22]    = 0      → PLL enabled
+// [21:20] = 00     → System clock uses main oscillator
+// [19:16] = 0x1    → XTAL = 16 MHz external crystal
+// [15]    = 0      → Do not bypass PLL
+// [14:13] = 10     → Use main oscillator (MOSC)
+// [12:11] = 10     → PLL output = 200 MHz
+// [10:6]  = 0x03   → System clock divisor = 4
+//
+// Final clock calculation:
+//   PLL output = 200 MHz
+//   System clock = 200 MHz / 4 = 50 MHz
+//
+// NOTE:
+// - POISC (Precision Internal Oscillator) = 16 MHz
+// - This setting assumes PLL lock is achieved
+// - No PLL lock wait check is included here
+// ---------------------------------------------------------------
+
+// SYSCTL_RCC_R = 0x02401551;
+// ---------------------------------------------------------------
+// This line configures the system clock to run at ~40 MHz.
+//
+// Same base configuration as above, but with a different
+// system clock divisor.
+//
+// Bit-level meaning of 0x02401551:
+//
+// [31:23] = 0x024  → Use PLL and system clock divider
+// [22]    = 0      → PLL enabled
+// [19:16] = 0x1    → XTAL = 16 MHz crystal
+// [12:11] = 10     → PLL output = 200 MHz
+// [10:6]  = 0x04   → System clock divisor = 5
+//
+// Final clock calculation:
+//   PLL output = 200 MHz
+//   System clock = 200 MHz / 5 = 40 MHz
+//
+// WHY USE THIS?
+// - Lower power consumption than 50 MHz
+// - More margin for peripherals with tight timing
+// - Safer when using delay loops or older libraries
+// ---------------------------------------------------------------
